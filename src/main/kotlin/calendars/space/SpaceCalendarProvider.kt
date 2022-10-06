@@ -6,6 +6,7 @@ import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
 import com.intellij.credentialStore.OneTimeString
 import com.intellij.ide.passwordSafe.PasswordSafe
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
@@ -24,9 +25,10 @@ class SpaceCalendarProvider: CalendarProvider {
         if (!isLoggedIn || (url == null || token == null)) { return listOf() }
 
         val profile = me(URL(url), token)?.id
+        val now = Clock.System.now().toString()
 
         val request = Request.Builder()
-            .url("$url/api/http/calendars/meetings?profiles=$profile")
+            .url("$url/api/http/calendars/meetings?profiles=$profile&endingAfter=$now")
             .header("Authorization", "Bearer $token")
             .header("Accept", "application/json")
             .build()
