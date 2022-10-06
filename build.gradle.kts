@@ -27,6 +27,10 @@ intellij {
     plugins.set(listOf(/* Plugin Dependencies */))
 }
 
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+}
+
 tasks {
     // Set the JVM compatibility versions
     withType<JavaCompile> {

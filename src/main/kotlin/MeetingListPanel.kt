@@ -1,5 +1,7 @@
 import java.awt.BorderLayout
 import java.awt.Dimension
+import java.awt.event.MouseAdapter
+import java.awt.event.MouseEvent
 import javax.swing.Box
 import javax.swing.BoxLayout
 import javax.swing.JButton
@@ -13,7 +15,13 @@ fun createMeetingsPanel(meetings: List<Meeting>): JPanel {
         add(JPanel().apply {
             border = EmptyBorder(5, 5, 5, 5)
             layout = BorderLayout()
-            add(JButton("Update"), BorderLayout.LINE_START)
+            add(JButton("Update").also { button ->
+                button.addMouseListener(object : MouseAdapter() {
+                    override fun mouseClicked(e: MouseEvent?) {
+                        button.rootPane.requestFocus()
+                    }
+                })
+            }, BorderLayout.CENTER)
         })
         meetings.forEach {
             val dimension = Dimension(0, 10)

@@ -1,3 +1,4 @@
+import kotlinx.datetime.toJavaLocalDateTime
 import java.awt.*
 import java.awt.datatransfer.StringSelection
 import java.awt.event.MouseAdapter
@@ -16,12 +17,13 @@ fun createMeetingPanel(meeting: Meeting): JPanel {
     }
     val dateFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
     val nameLabel = JLabel("<html><h2>${meeting.name}</h2></html>").apply { alignmentX = Component.LEFT_ALIGNMENT }
-    val dateLabel = JLabel(meeting.date.format(dateFormat)).apply { alignmentX = Component.LEFT_ALIGNMENT }
+    val dateLabel = JLabel(meeting.date.toJavaLocalDateTime().format(dateFormat)).apply { alignmentX = Component.LEFT_ALIGNMENT }
     val urlButton = JButton("Copy URL").apply {
         toolTipText = meeting.url
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent?) {
                 Toolkit.getDefaultToolkit().systemClipboard.setContents(StringSelection(meeting.url), null)
+                this@apply.rootPane.requestFocus()
             }
         })
     }
@@ -39,6 +41,8 @@ fun createMeetingPanel(meeting: Meeting): JPanel {
                         "Error",
                         JOptionPane.ERROR_MESSAGE
                     )
+                } finally {
+                    this@apply.rootPane.requestFocus()
                 }
             }
         })
