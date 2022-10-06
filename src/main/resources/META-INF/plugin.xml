@@ -27,4 +27,9 @@
     <extensions defaultExtensionNs="com.intellij">
 
     </extensions>
+    <actions>
+        <action id="calendars.space.SpaceLoginAction" class="calendars.space.SpaceLoginAction"
+                text="Login to Space for Meet Reminder">
+        </action>
+    </actions>
 </idea-plugin>
