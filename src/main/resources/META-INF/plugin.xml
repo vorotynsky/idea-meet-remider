@@ -25,6 +25,7 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
+        <toolWindow factoryClass="MeetingsListFactory" id="Meetings" anchor="right"/>
         <postStartupActivity implementation="SetupBackground" />
     </extensions>
 
@@ -35,4 +36,5 @@
         <action id="calendars.LoadCalendarEventsAction" class="calendars.LoadCalendarEventsAction"
                 text="Load All Calendar Events"/>
     </actions>
+    
 </idea-plugin>
