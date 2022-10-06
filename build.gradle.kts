@@ -2,6 +2,8 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "1.7.10"
     id("org.jetbrains.intellij") version "1.8.0"
+
+    kotlin("plugin.serialization") version "1.7.10"
 }
 
 group = "com.example"
@@ -9,6 +11,11 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+}
+
+dependencies {
+    implementation("com.squareup.okhttp3:okhttp:4.10.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 }
 
 // Configure Gradle IntelliJ Plugin
