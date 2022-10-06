@@ -3,5 +3,5 @@ package calendars
 interface CalendarProvider {
     val isLoggedIn: Boolean
 
-    fun load()
+    fun load() : List<CalendarItem>
 }
