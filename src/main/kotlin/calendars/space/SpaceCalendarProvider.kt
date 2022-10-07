@@ -28,7 +28,7 @@ class SpaceCalendarProvider: CalendarProvider {
         val now = Clock.System.now().toString()
 
         val request = Request.Builder()
-            .url("$url/api/http/calendars/meetings?profiles=$profile&endingAfter=$now")
+            .url("$url/api/http/calendars/meetings?profiles=$profile&startingAfter=$now")
             .header("Authorization", "Bearer $token")
             .header("Accept", "application/json")
             .build()
