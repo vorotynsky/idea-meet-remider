@@ -4,13 +4,11 @@ import calendars.space.SpaceCalendarProvider
 
 object CalendarStorage {
     val spaceCalendarProvider: SpaceCalendarProvider = SpaceCalendarProvider()
-    private var myEvents: List<CalendarItem> = listOf()
 
-    public var events: List<CalendarItem>
-        get() = myEvents
-        private set(value) { myEvents = value }
+    var events: List<CalendarItem> = emptyList()
+        private set
 
-    fun loadAll() {
-        myEvents = spaceCalendarProvider.load()
+    suspend fun loadAll() {
+        events = spaceCalendarProvider.load()
     }
 }

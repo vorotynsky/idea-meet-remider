@@ -6,6 +6,7 @@ import com.intellij.credentialStore.CredentialAttributes
 import com.intellij.credentialStore.Credentials
 import com.intellij.credentialStore.OneTimeString
 import com.intellij.ide.passwordSafe.PasswordSafe
+import calendars.executeAsync
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
@@ -19,7 +20,7 @@ class SpaceCalendarProvider: CalendarProvider {
     override val isLoggedIn: Boolean
         get() = getCredentials() != null
 
-    override fun load() : List<CalendarItem> {
+    override suspend fun load() : List<CalendarItem> {
         val url = getBaseUrl()
         val token = getCredentials()
         if (!isLoggedIn || (url == null || token == null)) { return listOf() }
@@ -33,16 +34,14 @@ class SpaceCalendarProvider: CalendarProvider {
             .header("Accept", "application/json")
             .build()
 
-        val body = OkHttpClient().newCall(request).execute().use {
-            try {
+        val body = OkHttpClient().newCall(request).executeAsync().use {
+            runCatching {
                 if (it.isSuccessful && it.body != null) {
                     val json = Json { ignoreUnknownKeys = true }
                     json.decodeFromString<SpaceCalendarItemsDto>(it.body?.string() ?: "")
                 }
-                else null
-            } catch (e: Throwable) {
-                null
-            }
+                else null.also { _ -> System.err.println(it.message) }
+            }.onFailure { it.printStackTrace() }.getOrNull()
         } ?: return listOf()
 
         return body.data.map {
@@ -58,7 +57,7 @@ class SpaceCalendarProvider: CalendarProvider {
         return CredentialAttributes("IdeaMeetReminder::SpaceCalendar")
     }
 
-    internal fun login(url: URL, token: String, callback: (String?) -> Unit) {
+    internal suspend fun login(url: URL, token: String, callback: (String?) -> Unit) {
         val body = me(url, OneTimeString(token))
 
         if (body?.username != null)
@@ -67,22 +66,20 @@ class SpaceCalendarProvider: CalendarProvider {
         callback(body?.username)
     }
 
-    private fun me(url: URL, token: OneTimeString): UsernameDto? {
+    private suspend fun me(url: URL, token: OneTimeString): UsernameDto? {
         val request = Request.Builder()
             .url("$url/api/http/team-directory/profiles/me")
             .header("Authorization", "Bearer $token")
             .header("Accept", "application/json")
             .build()
 
-        val body = OkHttpClient().newCall(request).execute().use {
-            try {
+        val body = OkHttpClient().newCall(request).executeAsync().use {
+            runCatching {
                 if (it.isSuccessful && it.body != null) {
                     val json = Json { ignoreUnknownKeys = true }
                     json.decodeFromString<UsernameDto>(it.body?.string() ?: "")
-                } else null
-            } catch (e: Throwable) {
-                null
-            }
+                } else null.also { _ -> System.err.println(it.message) }
+            }.onFailure { it.printStackTrace() }.getOrNull()
         }
         return body
     }
