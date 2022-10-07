@@ -29,8 +29,7 @@ fun ToolWindow.addEventList(events: List<CalendarItem>) {
     contentManager.addContent(ContentImpl(createMeetingsPanel(this, events), "", false))
 }
 
-suspend fun updateEvents(toolWindow: ToolWindow) {
-    val events = CalendarStorage.spaceCalendarProvider.load()
+suspend fun updateEvents(toolWindow: ToolWindow, events: List<CalendarItem> = emptyList()) {
     invokeLater {
         toolWindow.contentManager.removeAllContents(false)
         toolWindow.addEventList(events)

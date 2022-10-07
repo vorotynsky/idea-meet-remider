@@ -23,7 +23,7 @@ fun createMeetingsPanel(toolWindow: ToolWindow, meetings: List<CalendarItem>): J
                         toolWindow.addEventList(listOf())
                         
                         launchIoGlobally {
-                            updateEvents(toolWindow)
+                            CalendarStorage.loadAll()
                         }
                     }
                 })
