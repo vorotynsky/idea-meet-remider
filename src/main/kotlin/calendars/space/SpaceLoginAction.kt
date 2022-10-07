@@ -12,7 +12,7 @@ class SpaceLoginAction : AnAction("Login to Space for Meet Reminder") {
 
     override fun actionPerformed(e: AnActionEvent) {
 
-        val url = Messages.showInputDialog("Space | IDEA Meet Reminder", "Organization URL:", null, "https://", null) ?: ""
+        val url = Messages.showInputDialog("Organization URL:", "Space | IDEA Meet Reminder", null, "https://", null) ?: ""
         val password = Messages.showPasswordDialog("Personal permanent token:", "Space | IDEA Meet Reminder") ?: ""
 
         CalendarStorage.spaceCalendarProvider.login(URL(url), password) {
