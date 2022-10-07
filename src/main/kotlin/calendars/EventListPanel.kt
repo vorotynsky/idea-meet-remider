@@ -16,6 +16,7 @@ fun createMeetingsPanel(toolWindow: ToolWindow, meetings: List<CalendarItem>): J
         add(JPanel().apply {
             add(RoundButton("↺").also { button ->
                 button.preferredSize = Dimension(25, 25)
+                button.background = button.background.darker()
                 button.addMouseListener(object : MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
                         button.rootPane.requestFocus()
