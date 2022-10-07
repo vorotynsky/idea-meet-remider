@@ -38,6 +38,14 @@ fun createMeetingsPanel(toolWindow: ToolWindow, meetings: List<CalendarItem>): J
     return JPanel().apply {
         layout = BorderLayout()
         add(list, BorderLayout.NORTH)
+    }.let { innerPanel ->
+        val scroller = JScrollPane(innerPanel).apply {
+            border = null
+        }
+        JPanel().apply {
+            layout = BorderLayout()
+            add(scroller, BorderLayout.CENTER)
+        }
     }
 }
 
