@@ -4,7 +4,7 @@ import calendars.CalendarItem
 import kotlinx.datetime.LocalDateTime
 import kotlinx.serialization.Serializable
 
-data class SpaceCalendarItem(override val title: String, override val dateTime: LocalDateTime, override val url: String?) : CalendarItem
+data class SpaceCalendarItem(override val title: String, override val startDateTime: LocalDateTime, override val finishDateTime: LocalDateTime, override val url: String?) : CalendarItem
 
 @Serializable
 data class SpaceCalendarItemDto(val id: String, val summary: String, val occurrenceRule: OccurrenceRule)

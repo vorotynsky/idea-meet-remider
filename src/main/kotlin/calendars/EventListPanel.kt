@@ -29,7 +29,7 @@ fun createMeetingsPanel(toolWindow: ToolWindow, meetings: List<CalendarItem>): J
                 })
             })
         })
-        meetings.sortedBy { it.dateTime }.forEach {
+        meetings.sortedBy { it.startDateTime }.forEach {
             val dimension = Dimension(0, 10)
             add(Box.Filler(dimension, dimension, dimension))
             add(createMeetingPanel(it))

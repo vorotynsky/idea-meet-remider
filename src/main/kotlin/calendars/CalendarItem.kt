@@ -8,7 +8,8 @@ import java.net.URI
 
 interface CalendarItem {
     val title: String
-    val dateTime: LocalDateTime
+    val startDateTime: LocalDateTime
+    val finishDateTime: LocalDateTime
 
     val url: String?
 

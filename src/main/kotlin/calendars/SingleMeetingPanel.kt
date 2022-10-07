@@ -15,9 +15,15 @@ fun createMeetingPanel(meeting: CalendarItem): JPanel {
         layout = BorderLayout()
         border = EmptyBorder(10, 10, 10, 10)
     }
-    val dateFormat = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
+    val dateFormat = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+    val timeFormat = DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM)
     val titleLabel = JLabel("<html><h2>${meeting.title}</h2></html>").apply { alignmentX = Component.LEFT_ALIGNMENT }
-    val dateLabel = JLabel(meeting.dateTime.toJavaLocalDateTime().format(dateFormat)).apply { alignmentX = Component.LEFT_ALIGNMENT }
+    val startDateFormatted = meeting.startDateTime.toJavaLocalDateTime().format(dateFormat)
+    val startFormatted = meeting.startDateTime.toJavaLocalDateTime().format(timeFormat)
+    val endFormatted = meeting.finishDateTime.toJavaLocalDateTime().format(timeFormat)
+    val dateLabel = JLabel("<html><div align=\"center\">$startDateFormatted<br>$startFormatted - $endFormatted</div></html>").apply {
+        alignmentX = Component.LEFT_ALIGNMENT
+    }
     val urlButton = if (meeting.url != null) JButton("Copy URL").apply {
         toolTipText = meeting.url
         addMouseListener(object : MouseAdapter() {
@@ -28,8 +34,7 @@ fun createMeetingPanel(meeting: CalendarItem): JPanel {
         })
     } else null
 
-    val joinButton = if (meeting.url != null) JButton("Join meeting").apply {
-        toolTipText = "Open in browser"
+    val joinButton = if (meeting.url != null) JButton("Open in browser").apply {
         addMouseListener(object : MouseAdapter() {
             override fun mouseClicked(e: MouseEvent?) {
                 try {

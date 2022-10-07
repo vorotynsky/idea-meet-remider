@@ -7,8 +7,7 @@ import com.intellij.credentialStore.Credentials
 import com.intellij.credentialStore.OneTimeString
 import com.intellij.ide.passwordSafe.PasswordSafe
 import calendars.executeAsync
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -45,9 +44,15 @@ class SpaceCalendarProvider: CalendarProvider {
         } ?: return listOf()
 
         return body.data.map {
+            val startDateTime = Instant.parse(it.occurrenceRule.start.iso)
+                .toLocalDateTime(TimeZone.of(it.occurrenceRule.timezone.id))
+            val finishDateTime = Instant.parse(it.occurrenceRule.end.iso)
+                .toLocalDateTime(TimeZone.of(it.occurrenceRule.timezone.id))
+
             SpaceCalendarItem(
                 title = it.summary,
-                dateTime = LocalDateTime.parse(it.occurrenceRule.start.iso.removeRange(23, it.occurrenceRule.start.iso.length)),
+                startDateTime = startDateTime,
+                finishDateTime = finishDateTime,
                 url = url + "/meetings/" + it.id
             )
         }
