@@ -1,33 +1,33 @@
 package calendars
 
 import com.intellij.openapi.wm.ToolWindow
-import java.awt.BorderLayout
-import java.awt.Dimension
+import java.awt.*
 import java.awt.event.MouseAdapter
 import java.awt.event.MouseEvent
-import javax.swing.Box
-import javax.swing.BoxLayout
-import javax.swing.JButton
-import javax.swing.JPanel
+import java.awt.geom.Ellipse2D
+import javax.swing.*
 import javax.swing.border.EmptyBorder
+
 
 fun createMeetingsPanel(toolWindow: ToolWindow, meetings: List<CalendarItem>): JPanel {
     val list = JPanel().apply {
         layout = BoxLayout(this, BoxLayout.Y_AXIS)
         border = EmptyBorder(10, 10, 10, 10)
         add(JPanel().apply {
-            border = EmptyBorder(5, 5, 5, 5)
-            layout = BorderLayout()
-            add(JButton("Update").also { button ->
+            add(RoundButton("↺").also { button ->
+                button.preferredSize = Dimension(25, 25)
                 button.addMouseListener(object : MouseAdapter() {
                     override fun mouseClicked(e: MouseEvent?) {
+                        button.rootPane.requestFocus()
+                        toolWindow.contentManager.removeAllContents(false)
+                        toolWindow.addEventList(listOf())
+                        
                         launchIoGlobally {
                             updateEvents(toolWindow)
                         }
-                        button.rootPane.requestFocus()
                     }
                 })
-            }, BorderLayout.CENTER)
+            })
         })
         meetings.sortedBy { it.dateTime }.forEach {
             val dimension = Dimension(0, 10)
@@ -38,5 +38,41 @@ fun createMeetingsPanel(toolWindow: ToolWindow, meetings: List<CalendarItem>): J
     return JPanel().apply {
         layout = BorderLayout()
         add(list, BorderLayout.NORTH)
+    }
+}
+
+class RoundButton(label: String?) : JButton(label) {
+    override fun paintComponent(g: Graphics) {
+        if (getModel().isArmed) {
+            g.color = Color.gray
+        } else {
+            g.color = background
+        }
+        g.fillOval(0, 0, size.width - 1, size.height - 1)
+        super.paintComponent(g)
+    }
+
+    override fun paintBorder(g: Graphics) {
+        g.color = foreground
+        g.drawOval(0, 0, size.width - 1, size.height - 1)
+    }
+
+    var shape: Shape? = null
+
+    init {
+        val size = preferredSize
+        size.height = Math.max(size.width, size.height)
+        size.width = size.height
+        preferredSize = size
+        isContentAreaFilled = false
+    }
+
+    override fun contains(x: Int, y: Int): Boolean {
+        if (shape == null ||
+            !shape!!.bounds.equals(bounds)
+        ) {
+            shape = Ellipse2D.Float(0f, 0f, width.toFloat(), height.toFloat())
+        }
+        return shape!!.contains(x.toDouble(), y.toDouble())
     }
 }
