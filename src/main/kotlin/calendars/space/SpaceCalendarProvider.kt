@@ -8,6 +8,7 @@ import com.intellij.credentialStore.OneTimeString
 import com.intellij.ide.passwordSafe.PasswordSafe
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.toJavaLocalDateTime
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -28,7 +29,7 @@ class SpaceCalendarProvider: CalendarProvider {
         val now = Clock.System.now().toString()
 
         val request = Request.Builder()
-            .url("$url/api/http/calendars/meetings?profiles=$profile&endingAfter=$now")
+            .url("$url/api/http/calendars/meetings?profiles=$profile&startingAfter=$now")
             .header("Authorization", "Bearer $token")
             .header("Accept", "application/json")
             .build()

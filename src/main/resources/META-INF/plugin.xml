@@ -25,8 +25,9 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <postStartupActivity implementation="SetupBackground" />
     </extensions>
+
     <actions>
         <action id="calendars.space.SpaceLoginAction" class="calendars.space.SpaceLoginAction"
                 text="Login to Space for Meet Reminder">
